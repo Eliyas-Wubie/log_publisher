@@ -1,34 +1,36 @@
-from log_publisher.modules.connection import connectionPool,connect
-import socket
-import requests
-
+from log_publisher.modules.connection import handle_connection
 
 class LogPublisher:
-    def __init__(self,connection_pool=[]):
-        self.con_pool = connection_pool
+    def __init__(self,connection_dict):
+        self.io_con=connection_dict.get("socketIO")
+        self.webscoket_con=connection_dict.get("websocket")
+        self.TCP_con=connection_dict.get("TCP")
+        self.REST_con=connection_dict.get("REST")
+        self.UDP_con=connection_dict.get("UDP")
+    def set_connections(self,connection_dict):
+        keys=list(connection_dict.keys())
+        if "socketIO" in keys:
+            self.io_con=connection_dict.get("socketIO")
+        if "websocket" in keys:
+            self.webscoket_con=connection_dict.get("websocket")
+        if "TCP" in keys:
+            self.TCP_con=connection_dict.get("TCP")
+        if "REST" in keys:
+            self.REST_con=connection_dict.get("REST")
+        if "UDP" in keys:
+            self.UDP_con=connection_dict.get("UDP")
+    def get_connections(self):
+        return{
+            "socketIO":self.io_con,
+            "websocket":self.webscoket_con,
+            "TCP":self.TCP_con,
+            "UDP":self.UDP_con,
+            "REST":self.REST_con,
+        }
     def log(self,message):
-        for item in self.con_pool:
-            con_type=list(item.keys())[0]
-            con=list(item.values())[0]
-            if con_type=="socketIO":
-                sio=con.get_socketIO()
-                sio.send(message)
-            if con_type=="websocket":
-                websoc=con.get_websocket()
-                websoc.send(message)
-            if con_type=="REST":
-                ip_port= con
-                print("..............",ip_port)
-                url=f"http://{ip_port.get("ip")}:{ip_port.get("port")}/"
-                requests.post(url=url,json={"message":message})
-            if con_type=="TCP":
-                tcpcon=con.get_TCP()
-                print("****************",tcpcon)
-                try:
-                    tcpcon.sendall(message.encode())
-                except Exception as e:
-                    print("Send failed:", e)
-            if con_type=="UDP":
-                ip_port=con.register_UDP()
-                sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-                sock.sendto(message.encode('utf-8'), (ip_port.get("ip"), ip_port.get("port")))
+        cons=self.get_connections()
+        for k,v in cons.items():
+            if v!=None:
+                handle_connection(k,v,message)
+    
+
