@@ -19,13 +19,15 @@ def start_tcp_server(host='127.0.0.1', port=9003):
                     try:
                         print("000000000000000000000000")
                         data = conn.recv(1024)  # Receive up to 1024 bytes
+                        print("_____", data)
                         if not data:
                             print("Client disconnected")
                             break
                         print(f"Received data: {data.decode()}")
                         # Echo the received data back to the client
                         conn.sendall(data)
-                    except:
+                    except Exception as e:
+                        print(f"Exception in recv/send loop: {e}")
                         break
 
 

@@ -1,10 +1,10 @@
 from log_publisher.modules.connection import handle_connection
 
-class LogPublisher:
+class LogPublisher:      # rename to log_channels
     def __init__(self,connection_dict):
         self.io_con=connection_dict.get("socketIO")
         self.webscoket_con=connection_dict.get("websocket")
-        self.TCP_con=connection_dict.get("TCP")
+        # self.TCP_con=connection_dict.get("TCP")
         self.REST_con=connection_dict.get("REST")
         self.UDP_con=connection_dict.get("UDP")
     def set_connections(self,connection_dict):
@@ -13,8 +13,8 @@ class LogPublisher:
             self.io_con=connection_dict.get("socketIO")
         if "websocket" in keys:
             self.webscoket_con=connection_dict.get("websocket")
-        if "TCP" in keys:
-            self.TCP_con=connection_dict.get("TCP")
+        # if "TCP" in keys:
+        #     self.TCP_con=connection_dict.get("TCP")
         if "REST" in keys:
             self.REST_con=connection_dict.get("REST")
         if "UDP" in keys:
@@ -23,7 +23,7 @@ class LogPublisher:
         return{
             "socketIO":self.io_con,
             "websocket":self.webscoket_con,
-            "TCP":self.TCP_con,
+            # "TCP":self.TCP_con,
             "UDP":self.UDP_con,
             "REST":self.REST_con,
         }

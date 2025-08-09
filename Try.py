@@ -6,7 +6,7 @@ app=Flask(__name__)
 @app.route("/hi", methods=["GET","POST"])
 def check():
     print("foo")
-    log_publisher.log("heyyy")
+    log_publisher.log("heyyy \n")
     return jsonify({"message":"hey"})
 
 if __name__=="__main__":
