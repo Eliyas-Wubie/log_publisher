@@ -1,2 +1,1 @@
-# log_publisher
-publish code logs to local file systems or to remote servers via RestAPI, websocket, or TCP connection
+A flexible, object-oriented Python logging package that supports multi-destination log publishing. Logs can be simultaneously output to the console, written to files, and sent remotely via WebSocket, Socket.IO, REST API, and UDP. Designed with extensibility and reliability in mind, it allows full control over log formatting and transport, making it ideal for both local debugging and distributed system monitoring.
