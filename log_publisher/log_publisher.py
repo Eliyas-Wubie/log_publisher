@@ -218,20 +218,20 @@ def handle_reconnect(states):
 
 
 class LogPublisher:      # rename to log_channels
-    def __init__(self,connection_dict,console_logging=False):
+    def __init__(self,connection_dict,console_logging=False, reconnect=False):
         self.io_con=connection_dict.get("socketIO")
         self.websocket_con=connection_dict.get("websocket")
         self.REST_con=connection_dict.get("REST")
         self.UDP_con=connection_dict.get("UDP")
         self.file_path=connection_dict.get("file")
         self.console=console_logging
-
-        self._stop_event = threading.Event()
-        self.thread = threading.Thread(target=handle_reconnect, args=(self,), daemon=True)
-        self.thread.start()
-        # Register signal handlers INSIDE the class
-        signal.signal(signal.SIGINT, self._handle_shutdown_signal)
-        signal.signal(signal.SIGTERM, self._handle_shutdown_signal)
+        if reconnect:
+            self._stop_event = threading.Event()
+            self.thread = threading.Thread(target=handle_reconnect, args=(self,), daemon=True)
+            self.thread.start()
+            # Register signal handlers INSIDE the class
+            signal.signal(signal.SIGINT, self._handle_shutdown_signal)
+            signal.signal(signal.SIGTERM, self._handle_shutdown_signal)
 
     def set_connections(self,connection_dict):
         keys=list(connection_dict.keys())
